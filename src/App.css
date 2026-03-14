@@ -1,0 +1,360 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #1a1715;
+  --bg-card: #141414;
+  --bg-hover: #1a1a1a;
+  --text: #e8e0d4;
+  --text-dim: #8a8278;
+  --accent: #d4c5a9;
+  --accent-bright: #f0e6cc;
+  --warning: #d4a017;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(180deg, #000000 0%, var(--bg) 50%);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.01;
+  background-image: url('/texture.png');
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(26, 23, 21, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: none;
+}
+
+.header-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-link {
+  display: flex;
+}
+
+.logo {
+  height: 50px;
+  width: auto;
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+}
+
+nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--accent-bright);
+}
+
+/* Main */
+main {
+  flex: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 4rem 0 3rem;
+}
+
+.hero-logo {
+  width: 600px;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+/* Tour Dates */
+.tour-dates {
+  padding: 2rem 0;
+}
+
+.tour-dates h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #1f1f1f;
+}
+
+.dates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tour-row {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-card);
+  transition: background 0.2s;
+  border-radius: 4px;
+}
+
+.tour-row:hover {
+  background: var(--bg-hover);
+}
+
+.tour-date {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--accent-bright);
+  min-width: 100px;
+  letter-spacing: 0.05em;
+}
+
+.tour-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.tour-venue {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.tour-city {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.tour-status {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.4rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.tour-status.available {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.tour-status.available:hover {
+  opacity: 0.85;
+}
+
+.tour-status.sold-out {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid #333;
+  cursor: default;
+}
+
+.tour-status.low-tickets {
+  background: var(--warning);
+  color: var(--bg);
+}
+
+/* Bio */
+.bio-content {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.bio-content h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 2rem;
+}
+
+.bio-lede {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.bio-content p {
+  margin-bottom: 1.25rem;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.bio-content em {
+  color: var(--accent-bright);
+  font-style: italic;
+}
+
+.bio-content h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #1f1f1f;
+}
+
+.members {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.member {
+  background: var(--bg-card);
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #1f1f1f;
+}
+
+.member h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 0.25rem;
+}
+
+.member .role {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-bottom: 0.75rem;
+}
+
+.member p {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 0;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid #1f1f1f;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header-content {
+    padding: 0.75rem 1rem;
+  }
+
+  .logo {
+    height: 36px;
+  }
+
+  nav {
+    gap: 1.25rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .tour-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .tour-date {
+    min-width: auto;
+  }
+
+  .tour-status {
+    width: 100%;
+    text-align: center;
+  }
+
+  .members {
+    grid-template-columns: 1fr;
+  }
+}
