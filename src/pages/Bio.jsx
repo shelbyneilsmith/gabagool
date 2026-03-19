@@ -26,36 +26,36 @@ function Bio() {
       .catch(() => {})
   }, [])
 
-  if (!bio) return <div className="bio"><section className="bio-content"></section></div>
+  if (!bio) return <div><section className="max-w-[750px] mx-auto py-12"></section></div>
 
   return (
-    <div className="bio">
-      <section className="bio-content">
-        <h1>{bio.title}</h1>
+    <div>
+      <section className="max-w-[750px] mx-auto py-12">
+        <h1 className="font-heading text-[2.5rem] font-bold text-accent-bright mb-8">{bio.title}</h1>
         {bio.paragraphs.map((p, i) => (
-          <p key={i} className={i === 0 ? 'bio-lede' : undefined}>
+          <p key={i} className={i === 0 ? 'text-[1.15rem] leading-[1.8] text-accent mb-6' : 'mb-5 text-text leading-[1.8]'}>
             {p}
           </p>
         ))}
 
         {releases.length > 0 && (
           <>
-            <h2>Releases</h2>
-            <div className="releases-grid">
+            <h2 className="font-heading text-2xl font-bold uppercase tracking-[0.15em] text-accent mt-12 mb-6 pb-3 border-b-2 border-border">Releases</h2>
+            <div className="flex flex-col gap-8">
               {releases.map((release) => (
-                <div key={release.id} className="release-card">
+                <div key={release.id} className="flex gap-6 bg-bg-card border border-border rounded-md p-6 max-sm:flex-col max-sm:items-center max-sm:text-center">
                   {release.artwork && (
-                    <img src={release.artwork} alt={release.title} className="release-artwork" />
+                    <img src={release.artwork} alt={release.title} className="w-40 h-40 object-cover rounded shrink-0 max-sm:w-[200px] max-sm:h-[200px]" />
                   )}
-                  <div className="release-info">
-                    <h3>{release.title}</h3>
+                  <div className="flex flex-col gap-2">
+                    <h3 className="font-heading text-[1.3rem] font-bold text-accent-bright">{release.title}</h3>
                     {release.releaseDate && (
-                      <span className="release-date">{release.releaseDate}</span>
+                      <span className="text-sm text-text-dim italic">{release.releaseDate}</span>
                     )}
                     {release.tracks && release.tracks.length > 0 && (
-                      <ol className="release-tracks">
+                      <ol className="list-decimal pl-5 mt-2 max-sm:text-left">
                         {release.tracks.map((track, i) => (
-                          <li key={i}>{track}</li>
+                          <li key={i} className="text-sm text-text leading-[1.8]">{track}</li>
                         ))}
                       </ol>
                     )}

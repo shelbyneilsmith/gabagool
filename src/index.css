@@ -1,1 +1,59 @@
-/* Reset handled in App.css */
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #1a1715;
+  --color-bg-card: #141414;
+  --color-bg-hover: #1a1a1a;
+  --color-text: #e8e0d4;
+  --color-text-dim: #8a8278;
+  --color-accent: #d4c5a9;
+  --color-accent-bright: #f0e6cc;
+  --color-warning: #d4a017;
+  --color-danger: #f64949;
+  --color-border: #1f1f1f;
+  --color-border-light: #2a2a2a;
+  --color-spotify: #1DB954;
+  --color-apple-music: #FA2D48;
+
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+
+  --breakpoint-xs: 380px;
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(180deg, #000000 0%, var(--color-bg) 50%);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.01;
+    background-image: url('/texture.png');
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a8278' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+  }
+}
