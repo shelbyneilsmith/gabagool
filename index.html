@@ -4,10 +4,22 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
     <title>Gabagool</title>
+    <style>
+      .fonts-loading { opacity: 0; }
+      .fonts-ready { opacity: 1; transition: opacity 0.1s; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root" class="fonts-loading"></div>
+    <script>
+      document.fonts.ready.then(function() {
+        document.getElementById('root').className = 'fonts-ready';
+      });
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

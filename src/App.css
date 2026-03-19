@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@300;400;500&display=swap');
-
 :root {
   --bg: #1a1715;
   --bg-card: #141414;
@@ -68,6 +66,10 @@ body::before {
   display: flex;
 }
 
+.logo-link-hidden {
+  visibility: hidden;
+}
+
 .logo {
   height: 50px;
   width: auto;
@@ -113,7 +115,6 @@ main {
   width: 600px;
   max-width: 100%;
   height: auto;
-  margin-bottom: 2rem;
 }
 
 .hero h1 {
@@ -131,99 +132,109 @@ main {
   font-style: italic;
 }
 
-/* Tour Dates */
-.tour-dates {
-  padding: 2rem 0;
+/* Album Promo */
+.album-promo {
+  padding: 1rem 0 4rem;
 }
 
-.tour-dates h2 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--accent);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid #1f1f1f;
-}
-
-.dates-list {
+.album-container {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.tour-row {
-  display: flex;
+  gap: 3rem;
   align-items: center;
-  padding: 1.25rem 1.5rem;
-  background: var(--bg-card);
-  transition: background 0.2s;
-  border-radius: 4px;
 }
 
-.tour-row:hover {
-  background: var(--bg-hover);
+.album-art-wrapper {
+  flex-shrink: 0;
+  width: 420px;
 }
 
-.tour-date {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--accent-bright);
-  min-width: 100px;
-  letter-spacing: 0.05em;
+.album-art {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 80px rgba(212, 197, 169, 0.06);
 }
 
-.tour-info {
-  flex: 1;
+.album-info {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 1rem;
 }
 
-.tour-venue {
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-.tour-city {
-  color: var(--text-dim);
-  font-size: 0.85rem;
-}
-
-.tour-status {
+.album-label {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 0.4rem 1rem;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.tour-status.available {
-  background: var(--accent);
-  color: var(--bg);
-}
-
-.tour-status.available:hover {
-  opacity: 0.85;
-}
-
-.tour-status.sold-out {
-  background: transparent;
+  letter-spacing: 0.2em;
   color: var(--text-dim);
-  border: 1px solid #333;
-  cursor: default;
 }
 
-.tour-status.low-tickets {
-  background: var(--warning);
-  color: var(--bg);
+.album-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.album-description {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text);
+  max-width: 440px;
+}
+
+.album-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.stream-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: 50px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: fit-content;
+}
+
+.stream-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.stream-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.stream-link.spotify {
+  background: #1DB954;
+  color: #000;
+}
+
+.stream-link.spotify .stream-icon {
+  fill: #000;
+}
+
+.stream-link.apple-music {
+  background: #FA2D48;
+  color: #fff;
+}
+
+.stream-link.apple-music .stream-icon {
+  fill: #fff;
 }
 
 /* Bio */
@@ -308,6 +319,262 @@ main {
   margin-bottom: 0;
 }
 
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+
+.social-link:hover {
+  color: var(--accent-bright);
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Merch */
+.merch-page h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 0.5rem;
+}
+
+.merch-subtitle {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-bottom: 3rem;
+}
+
+.merch-category h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #1f1f1f;
+}
+
+.merch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.merch-card {
+  background: var(--bg-card);
+  border-radius: 6px;
+  border: 1px solid #1f1f1f;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.merch-card:hover {
+  border-color: #333;
+}
+
+.merch-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+}
+
+.merch-image-placeholder {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.merch-details {
+  padding: 1.25rem;
+}
+
+.merch-details h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 0.5rem;
+}
+
+.merch-description {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.merch-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.merch-price {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.merch-cta {
+  display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 3px;
+  background: var(--accent);
+  color: var(--bg);
+  transition: opacity 0.2s;
+}
+
+.merch-cta:hover {
+  opacity: 0.85;
+}
+
+/* Contact */
+.contact-page {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.contact-page h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-bright);
+  margin-bottom: 0.5rem;
+}
+
+.contact-subtitle {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-bottom: 2.5rem;
+}
+
+.contact-form {
+  max-width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a8278' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-submit {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 3px;
+  background: var(--accent);
+  color: var(--bg);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.contact-submit:hover {
+  opacity: 0.85;
+}
+
+.contact-success {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+.contact-success p {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-top: 1rem;
+}
+
 /* Footer */
 footer {
   text-align: center;
@@ -321,14 +588,50 @@ footer {
 @media (max-width: 640px) {
   .header-content {
     padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .logo-link {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
 
   .logo {
-    height: 36px;
+    height: 50px;
+  }
+
+  .logo-link-hidden {
+    display: none;
+  }
+
+  .hero {
+    padding: 1rem 0 0.5rem;
+  }
+
+  .hero-logo {
+    width: 400px;
   }
 
   nav {
+    order: 2;
+    justify-content: center;
     gap: 1.25rem;
+  }
+
+  nav a {
+    font-size: 0.8rem;
+  }
+
+  .social-links {
+    order: 3;
+    gap: 0.75rem;
+    justify-content: center;
+    width: 100%;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   main {
@@ -339,22 +642,64 @@ footer {
     font-size: 2rem;
   }
 
-  .tour-row {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 1rem;
+  .album-container {
+    flex-direction: column;
+    gap: 2rem;
   }
 
-  .tour-date {
-    min-width: auto;
-  }
-
-  .tour-status {
+  .album-art-wrapper {
     width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .album-title {
+    font-size: 2.2rem;
+  }
+
+  .album-info {
+    align-items: center;
     text-align: center;
+  }
+
+  .album-description {
+    max-width: 100%;
+  }
+
+  .album-links {
+    align-items: center;
   }
 
   .members {
     grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .merch-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-content {
+    padding: 0.6rem 0.75rem;
+  }
+
+  nav {
+    gap: 0.75rem;
+  }
+
+  nav a {
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
   }
 }

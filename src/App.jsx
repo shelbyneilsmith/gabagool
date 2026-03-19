@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Home from './pages/Home'
 import Bio from './pages/Bio'
+import Merch from './pages/Merch'
+import Contact from './pages/Contact'
 import './App.css'
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/bio" element={<Bio />} />
+            <Route path="/merch" element={<Merch />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
         <footer>
