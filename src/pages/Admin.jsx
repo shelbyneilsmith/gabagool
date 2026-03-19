@@ -18,7 +18,9 @@ function api(path, options = {}) {
 function Admin() {
   const navigate = useNavigate()
   const [bio, setBio] = useState(null)
+  const [bioText, setBioText] = useState('')
   const [merch, setMerch] = useState(null)
+  const CATEGORIES = ['T-Shirts', 'Enamel Pins', 'Stickers']
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -34,6 +36,7 @@ function Admin() {
     ])
       .then(([bioData, merchData]) => {
         setBio(bioData)
+        setBioText(bioData.paragraphs.join('\n\n'))
         setMerch(merchData)
       })
       .catch(() => {
@@ -49,25 +52,16 @@ function Admin() {
 
   async function saveBio() {
     setSaving(true)
-    const res = await api('/api/bio', { method: 'PUT', body: JSON.stringify(bio) })
-    if (res.ok) flash('Bio saved')
-    else flash('Failed to save bio')
+    const paragraphs = bioText.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+    const updated = { ...bio, paragraphs }
+    const res = await api('/api/bio', { method: 'PUT', body: JSON.stringify(updated) })
+    if (res.ok) {
+      setBio(updated)
+      flash('Bio saved')
+    } else {
+      flash('Failed to save bio')
+    }
     setSaving(false)
-  }
-
-  function updateParagraph(index, value) {
-    const updated = [...bio.paragraphs]
-    updated[index] = value
-    setBio({ ...bio, paragraphs: updated })
-  }
-
-  function addParagraph() {
-    setBio({ ...bio, paragraphs: [...bio.paragraphs, ''] })
-  }
-
-  function removeParagraph(index) {
-    const updated = bio.paragraphs.filter((_, i) => i !== index)
-    setBio({ ...bio, paragraphs: updated })
   }
 
   async function saveItem(item) {
@@ -144,25 +138,15 @@ function Admin() {
             onChange={(e) => setBio({ ...bio, title: e.target.value })}
           />
         </div>
-        {bio.paragraphs.map((p, i) => (
-          <div key={i} className="admin-paragraph">
-            <div className="form-group">
-              <label>
-                Paragraph {i + 1}
-                <button
-                  type="button"
-                  onClick={() => removeParagraph(i)}
-                  className="admin-remove-btn"
-                >
-                  Remove
-                </button>
-              </label>
-              <textarea rows={4} value={p} onChange={(e) => updateParagraph(i, e.target.value)} />
-            </div>
-          </div>
-        ))}
+        <div className="form-group">
+          <label>Content <span className="admin-hint">Separate paragraphs with a blank line</span></label>
+          <textarea
+            rows={16}
+            value={bioText}
+            onChange={(e) => setBioText(e.target.value)}
+          />
+        </div>
         <div className="admin-actions">
-          <button onClick={addParagraph} className="admin-btn admin-btn-secondary">Add Paragraph</button>
           <button onClick={saveBio} className="admin-btn" disabled={saving}>
             {saving ? 'Saving...' : 'Save Bio'}
           </button>
@@ -193,11 +177,14 @@ function Admin() {
                 </div>
                 <div className="form-group">
                   <label>Category</label>
-                  <input
-                    type="text"
+                  <select
                     value={item.category}
                     onChange={(e) => setMerch(merch.map((m) => m.id === item.id ? { ...m, category: e.target.value } : m))}
-                  />
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="form-group">

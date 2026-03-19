@@ -626,6 +626,15 @@ main {
   position: relative;
 }
 
+.admin-hint {
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: none;
+  letter-spacing: 0;
+  margin-left: 0.5rem;
+}
+
 .admin-remove-btn {
   background: none;
   border: none;
