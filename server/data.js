@@ -23,6 +23,8 @@ const DEFAULT_DATA = {
     ],
   },
   releases: [],
+  members: [],
+  shows: [],
   merch: [
     {
       id: '1',
@@ -141,6 +143,74 @@ export function deleteRelease(id) {
   const index = data.releases.findIndex((r) => r.id === id)
   if (index === -1) return false
   data.releases.splice(index, 1)
+  write(data)
+  return true
+}
+
+export function getMembers() {
+  const data = read()
+  return data.members || []
+}
+
+export function addMember(member) {
+  const data = read()
+  if (!data.members) data.members = []
+  member.id = randomBytes(4).toString('hex')
+  data.members.push(member)
+  write(data)
+  return member
+}
+
+export function updateMember(id, updates) {
+  const data = read()
+  if (!data.members) data.members = []
+  const index = data.members.findIndex((m) => m.id === id)
+  if (index === -1) return null
+  data.members[index] = { ...data.members[index], ...updates, id }
+  write(data)
+  return data.members[index]
+}
+
+export function deleteMember(id) {
+  const data = read()
+  if (!data.members) data.members = []
+  const index = data.members.findIndex((m) => m.id === id)
+  if (index === -1) return false
+  data.members.splice(index, 1)
+  write(data)
+  return true
+}
+
+export function getShows() {
+  const data = read()
+  return data.shows || []
+}
+
+export function addShow(show) {
+  const data = read()
+  if (!data.shows) data.shows = []
+  show.id = randomBytes(4).toString('hex')
+  data.shows.push(show)
+  write(data)
+  return show
+}
+
+export function updateShow(id, updates) {
+  const data = read()
+  if (!data.shows) data.shows = []
+  const index = data.shows.findIndex((s) => s.id === id)
+  if (index === -1) return null
+  data.shows[index] = { ...data.shows[index], ...updates, id }
+  write(data)
+  return data.shows[index]
+}
+
+export function deleteShow(id) {
+  const data = read()
+  if (!data.shows) data.shows = []
+  const index = data.shows.findIndex((s) => s.id === id)
+  if (index === -1) return false
+  data.shows.splice(index, 1)
   write(data)
   return true
 }

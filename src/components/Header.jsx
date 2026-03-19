@@ -12,6 +12,7 @@ function Header() {
         <nav>
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/bio">Bio</NavLink>
+          <NavLink to="/live">Live</NavLink>
           <NavLink to="/merch">Merch</NavLink>
           <NavLink to="/contact">Contact</NavLink>
         </nav>

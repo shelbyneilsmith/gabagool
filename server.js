@@ -4,7 +4,7 @@ import multer from 'multer'
 import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import { randomBytes } from 'crypto'
-import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, UPLOADS_DIR } from './server/data.js'
+import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, getMembers, addMember, updateMember, deleteMember, getShows, addShow, updateShow, deleteShow, UPLOADS_DIR } from './server/data.js'
 import { login, requireAuth } from './server/auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -106,6 +106,54 @@ app.put('/api/releases/:id', requireAuth, (req, res) => {
 app.delete('/api/releases/:id', requireAuth, (req, res) => {
   const deleted = deleteRelease(req.params.id)
   if (!deleted) return res.status(404).json({ error: 'Release not found' })
+  res.json({ success: true })
+})
+
+// --- Members API ---
+
+app.get('/api/members', (_req, res) => {
+  res.json(getMembers())
+})
+
+app.post('/api/members', requireAuth, (req, res) => {
+  const { name, role, bio } = req.body
+  if (!name) return res.status(400).json({ error: 'Name is required' })
+  res.json(addMember({ name, role: role || '', bio: bio || '' }))
+})
+
+app.put('/api/members/:id', requireAuth, (req, res) => {
+  const result = updateMember(req.params.id, req.body)
+  if (!result) return res.status(404).json({ error: 'Member not found' })
+  res.json(result)
+})
+
+app.delete('/api/members/:id', requireAuth, (req, res) => {
+  const deleted = deleteMember(req.params.id)
+  if (!deleted) return res.status(404).json({ error: 'Member not found' })
+  res.json({ success: true })
+})
+
+// --- Shows API ---
+
+app.get('/api/shows', (_req, res) => {
+  res.json(getShows())
+})
+
+app.post('/api/shows', requireAuth, (req, res) => {
+  const { date, venue, city, ticketLink } = req.body
+  if (!date || !venue) return res.status(400).json({ error: 'Date and venue are required' })
+  res.json(addShow({ date, venue, city: city || '', ticketLink: ticketLink || '' }))
+})
+
+app.put('/api/shows/:id', requireAuth, (req, res) => {
+  const result = updateShow(req.params.id, req.body)
+  if (!result) return res.status(404).json({ error: 'Show not found' })
+  res.json(result)
+})
+
+app.delete('/api/shows/:id', requireAuth, (req, res) => {
+  const deleted = deleteShow(req.params.id)
+  if (!deleted) return res.status(404).json({ error: 'Show not found' })
   res.json({ success: true })
 })
 

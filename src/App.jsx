@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Home from './pages/Home'
 import Bio from './pages/Bio'
 import Merch from './pages/Merch'
+import Live from './pages/Live'
 import Contact from './pages/Contact'
 import AdminLogin from './pages/AdminLogin'
 import Admin from './pages/Admin'
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/bio" element={<Bio />} />
+            <Route path="/live" element={<Live />} />
             <Route path="/merch" element={<Merch />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin/login" element={<AdminLogin />} />
