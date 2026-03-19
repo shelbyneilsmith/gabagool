@@ -13,25 +13,58 @@ const FALLBACK = {
 
 function Bio() {
   const [bio, setBio] = useState(null)
+  const [releases, setReleases] = useState([])
 
   useEffect(() => {
     fetch('/api/bio')
       .then((r) => r.json())
       .then(setBio)
       .catch(() => setBio(FALLBACK))
+    fetch('/api/releases')
+      .then((r) => r.json())
+      .then(setReleases)
+      .catch(() => {})
   }, [])
 
-  const data = bio || FALLBACK
+  if (!bio) return <div className="bio"><section className="bio-content"></section></div>
 
   return (
     <div className="bio">
       <section className="bio-content">
-        <h1>{data.title}</h1>
-        {data.paragraphs.map((p, i) => (
+        <h1>{bio.title}</h1>
+        {bio.paragraphs.map((p, i) => (
           <p key={i} className={i === 0 ? 'bio-lede' : undefined}>
             {p}
           </p>
         ))}
+
+        {releases.length > 0 && (
+          <>
+            <h2>Releases</h2>
+            <div className="releases-grid">
+              {releases.map((release) => (
+                <div key={release.id} className="release-card">
+                  {release.artwork && (
+                    <img src={release.artwork} alt={release.title} className="release-artwork" />
+                  )}
+                  <div className="release-info">
+                    <h3>{release.title}</h3>
+                    {release.releaseDate && (
+                      <span className="release-date">{release.releaseDate}</span>
+                    )}
+                    {release.tracks && release.tracks.length > 0 && (
+                      <ol className="release-tracks">
+                        {release.tracks.map((track, i) => (
+                          <li key={i}>{track}</li>
+                        ))}
+                      </ol>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </section>
     </div>
   )

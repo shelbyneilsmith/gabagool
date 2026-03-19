@@ -20,6 +20,7 @@ function Admin() {
   const [bio, setBio] = useState(null)
   const [bioText, setBioText] = useState('')
   const [merch, setMerch] = useState(null)
+  const [releases, setReleases] = useState(null)
   const CATEGORIES = ['T-Shirts', 'Enamel Pins', 'Stickers']
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
@@ -33,11 +34,13 @@ function Admin() {
     Promise.all([
       api('/api/bio').then((r) => (r.ok ? r.json() : Promise.reject())),
       api('/api/merch').then((r) => (r.ok ? r.json() : Promise.reject())),
+      api('/api/releases').then((r) => (r.ok ? r.json() : Promise.reject())),
     ])
-      .then(([bioData, merchData]) => {
+      .then(([bioData, merchData, releasesData]) => {
         setBio(bioData)
         setBioText(bioData.paragraphs.join('\n\n'))
         setMerch(merchData)
+        setReleases(releasesData)
       })
       .catch(() => {
         localStorage.removeItem('admin_token')
@@ -112,12 +115,66 @@ function Admin() {
     }
   }
 
+  async function saveRelease(release) {
+    setSaving(true)
+    const res = await api(`/api/releases/${release.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(release),
+    })
+    if (res.ok) {
+      const updated = await res.json()
+      setReleases(releases.map((r) => (r.id === updated.id ? updated : r)))
+      flash('Release saved')
+    } else {
+      flash('Failed to save release')
+    }
+    setSaving(false)
+  }
+
+  async function deleteRelease(id) {
+    if (!window.confirm('Delete this release?')) return
+    const res = await api(`/api/releases/${id}`, { method: 'DELETE' })
+    if (res.ok) {
+      setReleases(releases.filter((r) => r.id !== id))
+      flash('Release deleted')
+    }
+  }
+
+  async function addRelease() {
+    const res = await api('/api/releases', {
+      method: 'POST',
+      body: JSON.stringify({ title: 'New Release', artwork: '', releaseDate: '', tracks: [] }),
+    })
+    if (res.ok) {
+      const release = await res.json()
+      setReleases([...releases, release])
+      flash('Release added')
+    }
+  }
+
+  async function uploadReleaseArtwork(releaseId, file) {
+    const formData = new FormData()
+    formData.append('image', file)
+    const res = await api('/api/merch/upload', { method: 'POST', body: formData })
+    if (res.ok) {
+      const { url } = await res.json()
+      const release = releases.find((r) => r.id === releaseId)
+      if (release) saveRelease({ ...release, artwork: url })
+    }
+  }
+
+  function updateReleaseTracks(releaseId, tracksText) {
+    setReleases(releases.map((r) =>
+      r.id === releaseId ? { ...r, tracksText } : r
+    ))
+  }
+
   function logout() {
     localStorage.removeItem('admin_token')
     navigate('/admin/login')
   }
 
-  if (!bio || !merch) return <div className="contact-page"><p>Loading...</p></div>
+  if (!bio || !merch || !releases) return <div className="contact-page"><p>Loading...</p></div>
 
   return (
     <div className="admin-page">
@@ -214,6 +271,69 @@ function Admin() {
           </div>
         ))}
         <button onClick={addItem} className="admin-btn admin-btn-secondary">Add Merch Item</button>
+      </section>
+
+      <section className="admin-section">
+        <h2>Releases</h2>
+        {releases.map((release) => (
+          <div key={release.id} className="admin-merch-item">
+            <div className="admin-merch-fields">
+              <div className="form-group">
+                <label>Title</label>
+                <input
+                  type="text"
+                  value={release.title}
+                  onChange={(e) => setReleases(releases.map((r) => r.id === release.id ? { ...r, title: e.target.value } : r))}
+                />
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Release Date</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. March 2026"
+                    value={release.releaseDate}
+                    onChange={(e) => setReleases(releases.map((r) => r.id === release.id ? { ...r, releaseDate: e.target.value } : r))}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Artwork</label>
+                  <div className="admin-image-row">
+                    {release.artwork && <img src={release.artwork} alt="" className="admin-thumb" />}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => e.target.files[0] && uploadReleaseArtwork(release.id, e.target.files[0])}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Track Listing <span className="admin-hint">One track per line</span></label>
+                <textarea
+                  rows={6}
+                  value={release.tracksText !== undefined ? release.tracksText : (release.tracks || []).join('\n')}
+                  onChange={(e) => updateReleaseTracks(release.id, e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="admin-merch-actions">
+              <button
+                onClick={() => {
+                  const tracks = (release.tracksText !== undefined ? release.tracksText : (release.tracks || []).join('\n'))
+                    .split('\n').map((t) => t.trim()).filter(Boolean)
+                  saveRelease({ ...release, tracks, tracksText: undefined })
+                }}
+                className="admin-btn"
+                disabled={saving}
+              >
+                Save
+              </button>
+              <button onClick={() => deleteRelease(release.id)} className="admin-btn admin-btn-danger">Delete</button>
+            </div>
+          </div>
+        ))}
+        <button onClick={addRelease} className="admin-btn admin-btn-secondary">Add Release</button>
       </section>
     </div>
   )

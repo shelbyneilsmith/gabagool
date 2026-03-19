@@ -4,7 +4,7 @@ import multer from 'multer'
 import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import { randomBytes } from 'crypto'
-import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, UPLOADS_DIR } from './server/data.js'
+import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, UPLOADS_DIR } from './server/data.js'
 import { login, requireAuth } from './server/auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -83,6 +83,30 @@ app.delete('/api/merch/:id', requireAuth, (req, res) => {
 app.post('/api/merch/upload', requireAuth, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No image uploaded' })
   res.json({ url: `/uploads/${req.file.filename}` })
+})
+
+// --- Releases API ---
+
+app.get('/api/releases', (_req, res) => {
+  res.json(getReleases())
+})
+
+app.post('/api/releases', requireAuth, (req, res) => {
+  const { title, artwork, releaseDate, tracks } = req.body
+  if (!title) return res.status(400).json({ error: 'Title is required' })
+  res.json(addRelease({ title, artwork: artwork || '', releaseDate: releaseDate || '', tracks: tracks || [] }))
+})
+
+app.put('/api/releases/:id', requireAuth, (req, res) => {
+  const result = updateRelease(req.params.id, req.body)
+  if (!result) return res.status(404).json({ error: 'Release not found' })
+  res.json(result)
+})
+
+app.delete('/api/releases/:id', requireAuth, (req, res) => {
+  const deleted = deleteRelease(req.params.id)
+  if (!deleted) return res.status(404).json({ error: 'Release not found' })
+  res.json({ success: true })
 })
 
 // --- Serve frontend ---

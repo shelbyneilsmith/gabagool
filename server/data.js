@@ -22,6 +22,7 @@ const DEFAULT_DATA = {
       'One guy. One basement. Zero excuses.',
     ],
   },
+  releases: [],
   merch: [
     {
       id: '1',
@@ -106,6 +107,40 @@ export function deleteMerchItem(id) {
   const index = data.merch.findIndex((m) => m.id === id)
   if (index === -1) return false
   data.merch.splice(index, 1)
+  write(data)
+  return true
+}
+
+export function getReleases() {
+  const data = read()
+  return data.releases || []
+}
+
+export function addRelease(release) {
+  const data = read()
+  if (!data.releases) data.releases = []
+  release.id = randomBytes(4).toString('hex')
+  data.releases.push(release)
+  write(data)
+  return release
+}
+
+export function updateRelease(id, updates) {
+  const data = read()
+  if (!data.releases) data.releases = []
+  const index = data.releases.findIndex((r) => r.id === id)
+  if (index === -1) return null
+  data.releases[index] = { ...data.releases[index], ...updates, id }
+  write(data)
+  return data.releases[index]
+}
+
+export function deleteRelease(id) {
+  const data = read()
+  if (!data.releases) data.releases = []
+  const index = data.releases.findIndex((r) => r.id === id)
+  if (index === -1) return false
+  data.releases.splice(index, 1)
   write(data)
   return true
 }
