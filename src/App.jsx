@@ -4,6 +4,8 @@ import Home from './pages/Home'
 import Bio from './pages/Bio'
 import Merch from './pages/Merch'
 import Contact from './pages/Contact'
+import AdminLogin from './pages/AdminLogin'
+import Admin from './pages/Admin'
 import './App.css'
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
             <Route path="/bio" element={<Bio />} />
             <Route path="/merch" element={<Merch />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
         <footer>

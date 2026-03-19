@@ -1,38 +1,25 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-const merchItems = [
-  {
-    name: 'Gabagool Logo Tee',
-    description: 'Classic logo on black. Simple. Bleak. Machine washable.',
-    price: '$16',
-    category: 'T-Shirts',
-    image: '/merch_logo_tee.jpg',
-  },
-  {
-    name: 'Gabagool Logo Enamel Pin',
-    description: 'Hard enamel, black nickel plating, standard metal clasp back. Looks great on your jacket or your crumbling sense of self.',
-    price: '$5',
-    category: 'Enamel Pins',
-    image: '/merch_enamel_pin.jpg',
-  },
-  {
-    name: 'Gabagool Logo Large Sticker',
-    description: '4" sticker',
-    price: '$2',
-    category: 'Stickers',
-    image: '/merch_sticker.jpg',
-  },
-  {
-    name: 'Gabagool Logo Small Sticker',
-    description: '3" sticker',
-    price: '$2',
-    category: 'Stickers',
-    image: '/merch_sticker.jpg',
-  },
+const FALLBACK_ITEMS = [
+  { id: '1', name: 'Gabagool Logo Tee', description: 'Classic logo on black. Simple. Bleak. Machine washable.', price: '$16', category: 'T-Shirts', image: '/merch_logo_tee.jpg' },
+  { id: '2', name: 'Gabagool Logo Enamel Pin', description: 'Hard enamel, black nickel plating, standard metal clasp back. Looks great on your jacket or your crumbling sense of self.', price: '$5', category: 'Enamel Pins', image: '/merch_enamel_pin.jpg' },
+  { id: '3', name: 'Gabagool Logo Large Sticker', description: '4" sticker', price: '$2', category: 'Stickers', image: '/merch_sticker.jpg' },
+  { id: '4', name: 'Gabagool Logo Small Sticker', description: '3" sticker', price: '$2', category: 'Stickers', image: '/merch_sticker.jpg' },
 ]
 
 function Merch() {
-  const categories = ['T-Shirts', 'Enamel Pins', 'Stickers']
+  const [items, setItems] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/merch')
+      .then((r) => r.json())
+      .then(setItems)
+      .catch(() => setItems(FALLBACK_ITEMS))
+  }, [])
+
+  const merchItems = items || FALLBACK_ITEMS
+  const categories = [...new Set(merchItems.map((m) => m.category))]
 
   return (
     <div className="merch-page">
@@ -46,7 +33,7 @@ function Merch() {
             {merchItems
               .filter((item) => item.category === category)
               .map((item) => (
-                <div key={item.name} className="merch-card">
+                <div key={item.id || item.name} className="merch-card">
                   {item.image ? (
                     <img src={item.image} alt={item.name} className="merch-image" />
                   ) : (
