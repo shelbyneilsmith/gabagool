@@ -3,25 +3,29 @@ import { useState, useEffect } from 'react'
 function Live() {
   const [members, setMembers] = useState(null)
   const [shows, setShows] = useState(null)
+  const [liveIntro, setLiveIntro] = useState(null)
 
   useEffect(() => {
     fetch('/api/members').then((r) => r.json()).then(setMembers).catch(() => setMembers([]))
     fetch('/api/shows').then((r) => r.json()).then(setShows).catch(() => setShows([]))
+    fetch('/api/live-intro').then((r) => r.json()).then(setLiveIntro).catch(() => setLiveIntro(''))
   }, [])
 
-  if (!members || !shows) return <div className="live-page"><p>Loading...</p></div>
+  if (!members || !shows || liveIntro === null) return <div className="live-page"><p>Loading...</p></div>
 
   return (
     <div className="live-page">
+      <h1>Live</h1>
+      {liveIntro && <p className="live-intro">{liveIntro}</p>}
+
       {members.length > 0 && (
         <section className="live-section">
-          <h1>The Band</h1>
-          <div className="members-grid">
+          <h2>The Band</h2>
+          <div className="members-list">
             {members.map((member) => (
-              <div key={member.id} className="member-card">
-                <h3>{member.name}</h3>
+              <div key={member.id} className="member-row">
+                <span className="member-name">{member.name}</span>
                 {member.role && <span className="member-role">{member.role}</span>}
-                {member.bio && <p>{member.bio}</p>}
               </div>
             ))}
           </div>
@@ -29,7 +33,7 @@ function Live() {
       )}
 
       <section className="live-section">
-        <h1>{members.length > 0 ? 'Upcoming Shows' : 'Live'}</h1>
+        <h2>Upcoming Shows</h2>
         {shows.length > 0 ? (
           <div className="shows-list">
             {shows.map((show) => (

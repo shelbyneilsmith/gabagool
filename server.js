@@ -4,7 +4,7 @@ import multer from 'multer'
 import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import { randomBytes } from 'crypto'
-import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, getMembers, addMember, updateMember, deleteMember, getShows, addShow, updateShow, deleteShow, UPLOADS_DIR } from './server/data.js'
+import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, getLiveIntro, updateLiveIntro, getMembers, addMember, updateMember, deleteMember, getShows, addShow, updateShow, deleteShow, UPLOADS_DIR } from './server/data.js'
 import { login, requireAuth } from './server/auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -107,6 +107,18 @@ app.delete('/api/releases/:id', requireAuth, (req, res) => {
   const deleted = deleteRelease(req.params.id)
   if (!deleted) return res.status(404).json({ error: 'Release not found' })
   res.json({ success: true })
+})
+
+// --- Live Intro API ---
+
+app.get('/api/live-intro', (_req, res) => {
+  res.json(getLiveIntro())
+})
+
+app.put('/api/live-intro', requireAuth, (req, res) => {
+  const { text } = req.body
+  if (text === undefined) return res.status(400).json({ error: 'Text is required' })
+  res.json(updateLiveIntro(text))
 })
 
 // --- Members API ---

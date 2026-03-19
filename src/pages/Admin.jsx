@@ -21,6 +21,7 @@ function Admin() {
   const [bioText, setBioText] = useState('')
   const [merch, setMerch] = useState(null)
   const [releases, setReleases] = useState(null)
+  const [liveIntro, setLiveIntro] = useState(null)
   const [members, setMembers] = useState(null)
   const [shows, setShows] = useState(null)
   const CATEGORIES = ['T-Shirts', 'Enamel Pins', 'Stickers']
@@ -38,14 +39,16 @@ function Admin() {
       api('/api/bio').then((r) => (r.ok ? r.json() : Promise.reject())),
       api('/api/merch').then((r) => (r.ok ? r.json() : Promise.reject())),
       api('/api/releases').then((r) => (r.ok ? r.json() : Promise.reject())),
+      api('/api/live-intro').then((r) => (r.ok ? r.json() : Promise.reject())),
       api('/api/members').then((r) => (r.ok ? r.json() : Promise.reject())),
       api('/api/shows').then((r) => (r.ok ? r.json() : Promise.reject())),
     ])
-      .then(([bioData, merchData, releasesData, membersData, showsData]) => {
+      .then(([bioData, merchData, releasesData, liveIntroData, membersData, showsData]) => {
         setBio(bioData)
         setBioText(bioData.paragraphs.join('\n\n'))
         setMerch(merchData)
         setReleases(releasesData)
+        setLiveIntro(liveIntroData)
         setMembers(membersData)
         setShows(showsData)
       })
@@ -176,6 +179,17 @@ function Admin() {
     ))
   }
 
+  async function saveLiveIntro() {
+    setSaving(true)
+    const res = await api('/api/live-intro', { method: 'PUT', body: JSON.stringify({ text: liveIntro }) })
+    if (res.ok) {
+      flash('Live intro saved')
+    } else {
+      flash('Failed to save live intro')
+    }
+    setSaving(false)
+  }
+
   async function saveMember(member) {
     setSaving(true)
     const res = await api(`/api/members/${member.id}`, { method: 'PUT', body: JSON.stringify(member) })
@@ -249,14 +263,13 @@ function Admin() {
     navigate('/admin/login')
   }
 
-  if (!bio || !merch || !releases || !members || !shows) return <div className="contact-page"><p>Loading...</p></div>
+  if (!bio || !merch || !releases || liveIntro === null || !members || !shows) return <div className="contact-page"><p>Loading...</p></div>
 
   const TABS = [
     { id: 'bio', label: 'Bio' },
     { id: 'releases', label: 'Releases' },
     { id: 'merch', label: 'Merch' },
-    { id: 'members', label: 'Members' },
-    { id: 'shows', label: 'Shows' },
+    { id: 'live', label: 'Live' },
   ]
 
   return (
@@ -439,104 +452,121 @@ function Admin() {
             </section>
           )}
 
-          {tab === 'members' && (
-            <section className="admin-section">
-              <h2>Band Members</h2>
-              {members.map((member) => (
-                <div key={member.id} className="admin-merch-item">
-                  <div className="admin-merch-fields">
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Name</label>
-                        <input
-                          type="text"
-                          value={member.name}
-                          onChange={(e) => setMembers(members.map((m) => m.id === member.id ? { ...m, name: e.target.value } : m))}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Role</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Guitar, Vocals"
-                          value={member.role}
-                          onChange={(e) => setMembers(members.map((m) => m.id === member.id ? { ...m, role: e.target.value } : m))}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Bio</label>
-                      <textarea
-                        rows={2}
-                        value={member.bio}
-                        onChange={(e) => setMembers(members.map((m) => m.id === member.id ? { ...m, bio: e.target.value } : m))}
-                      />
-                    </div>
-                  </div>
-                  <div className="admin-merch-actions">
-                    <button onClick={() => saveMember(member)} className="admin-btn" disabled={saving}>Save</button>
-                    <button onClick={() => deleteMemberItem(member.id)} className="admin-btn admin-btn-danger">Delete</button>
-                  </div>
+          {tab === 'live' && (
+            <>
+              <section className="admin-section">
+                <h2>Intro</h2>
+                <div className="form-group">
+                  <label>Intro Paragraph</label>
+                  <textarea
+                    rows={4}
+                    value={liveIntro}
+                    onChange={(e) => setLiveIntro(e.target.value)}
+                  />
                 </div>
-              ))}
-              <button onClick={addMemberItem} className="admin-btn admin-btn-secondary">Add Member</button>
-            </section>
-          )}
+                <div className="admin-actions">
+                  <button onClick={saveLiveIntro} className="admin-btn" disabled={saving}>
+                    {saving ? 'Saving...' : 'Save Intro'}
+                  </button>
+                </div>
+              </section>
 
-          {tab === 'shows' && (
-            <section className="admin-section">
-              <h2>Shows</h2>
-              {shows.map((show) => (
-                <div key={show.id} className="admin-merch-item">
-                  <div className="admin-merch-fields">
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Date</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Apr 12, 2026"
-                          value={show.date}
-                          onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, date: e.target.value } : s))}
-                        />
+              <section className="admin-section">
+                <h2>Band Members</h2>
+                {members.map((member) => (
+                  <div key={member.id} className="admin-merch-item">
+                    <div className="admin-merch-fields">
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Name</label>
+                          <input
+                            type="text"
+                            value={member.name}
+                            onChange={(e) => setMembers(members.map((m) => m.id === member.id ? { ...m, name: e.target.value } : m))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Role</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Guitar, Vocals"
+                            value={member.role}
+                            onChange={(e) => setMembers(members.map((m) => m.id === member.id ? { ...m, role: e.target.value } : m))}
+                          />
+                        </div>
                       </div>
                       <div className="form-group">
-                        <label>City</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Raleigh, NC"
-                          value={show.city}
-                          onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, city: e.target.value } : s))}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-row">
-                      <div className="form-group">
-                        <label>Venue</label>
-                        <input
-                          type="text"
-                          value={show.venue}
-                          onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, venue: e.target.value } : s))}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Ticket Link <span className="admin-hint">Optional</span></label>
-                        <input
-                          type="text"
-                          placeholder="https://..."
-                          value={show.ticketLink}
-                          onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, ticketLink: e.target.value } : s))}
+                        <label>Bio</label>
+                        <textarea
+                          rows={2}
+                          value={member.bio}
+                          onChange={(e) => setMembers(members.map((m) => m.id === member.id ? { ...m, bio: e.target.value } : m))}
                         />
                       </div>
                     </div>
+                    <div className="admin-merch-actions">
+                      <button onClick={() => saveMember(member)} className="admin-btn" disabled={saving}>Save</button>
+                      <button onClick={() => deleteMemberItem(member.id)} className="admin-btn admin-btn-danger">Delete</button>
+                    </div>
                   </div>
-                  <div className="admin-merch-actions">
-                    <button onClick={() => saveShow(show)} className="admin-btn" disabled={saving}>Save</button>
-                    <button onClick={() => deleteShowItem(show.id)} className="admin-btn admin-btn-danger">Delete</button>
+                ))}
+                <button onClick={addMemberItem} className="admin-btn admin-btn-secondary">Add Member</button>
+              </section>
+
+              <section className="admin-section">
+                <h2>Shows</h2>
+                {shows.map((show) => (
+                  <div key={show.id} className="admin-merch-item">
+                    <div className="admin-merch-fields">
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Date</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Apr 12, 2026"
+                            value={show.date}
+                            onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, date: e.target.value } : s))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>City</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Raleigh, NC"
+                            value={show.city}
+                            onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, city: e.target.value } : s))}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Venue</label>
+                          <input
+                            type="text"
+                            value={show.venue}
+                            onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, venue: e.target.value } : s))}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Ticket Link <span className="admin-hint">Optional</span></label>
+                          <input
+                            type="text"
+                            placeholder="https://..."
+                            value={show.ticketLink}
+                            onChange={(e) => setShows(shows.map((s) => s.id === show.id ? { ...s, ticketLink: e.target.value } : s))}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="admin-merch-actions">
+                      <button onClick={() => saveShow(show)} className="admin-btn" disabled={saving}>Save</button>
+                      <button onClick={() => deleteShowItem(show.id)} className="admin-btn admin-btn-danger">Delete</button>
+                    </div>
                   </div>
-                </div>
-              ))}
-              <button onClick={addShowItem} className="admin-btn admin-btn-secondary">Add Show</button>
-            </section>
+                ))}
+                <button onClick={addShowItem} className="admin-btn admin-btn-secondary">Add Show</button>
+              </section>
+            </>
           )}
         </div>
       </div>

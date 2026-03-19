@@ -385,48 +385,60 @@ main {
   margin-bottom: 3rem;
 }
 
-.live-section h1 {
+.live-page h1 {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--accent-bright);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
-.members-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+.live-intro {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text);
+  margin-bottom: 2.5rem;
 }
 
-.member-card {
-  background: var(--bg-card);
-  padding: 1.5rem;
-  border-radius: 6px;
-  border: 1px solid #1f1f1f;
-}
-
-.member-card h3 {
+.live-section h2 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #1f1f1f;
+}
+
+.members-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.member-row:first-child {
+  border-top: 1px solid #1f1f1f;
+}
+
+.member-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--accent-bright);
-  margin-bottom: 0.25rem;
 }
 
 .member-role {
-  display: block;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 0.85rem;
   color: var(--text-dim);
-  margin-bottom: 0.75rem;
-}
-
-.member-card p {
-  font-size: 0.9rem;
-  color: var(--text);
-  line-height: 1.6;
 }
 
 .shows-list {

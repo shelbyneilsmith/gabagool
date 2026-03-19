@@ -23,6 +23,7 @@ const DEFAULT_DATA = {
     ],
   },
   releases: [],
+  liveIntro: 'While Gabagool is mostly the brainchild of Shelby Smith — who writes, records, and produces everything in his basement — there\'s a whole band that brings the noise to life on stage. These are the people who make it loud.',
   members: [],
   shows: [],
   merch: [
@@ -145,6 +146,18 @@ export function deleteRelease(id) {
   data.releases.splice(index, 1)
   write(data)
   return true
+}
+
+export function getLiveIntro() {
+  const data = read()
+  return data.liveIntro || ''
+}
+
+export function updateLiveIntro(text) {
+  const data = read()
+  data.liveIntro = text
+  write(data)
+  return data.liveIntro
 }
 
 export function getMembers() {
