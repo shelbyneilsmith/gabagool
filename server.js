@@ -5,12 +5,12 @@ import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import { randomBytes } from 'crypto'
 import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, getLiveIntro, updateLiveIntro, getMembers, addMember, updateMember, deleteMember, getShows, addShow, updateShow, deleteShow, UPLOADS_DIR } from './server/data.js'
-import { login, requireAuth } from './server/auth.js'
+import { login, requireAuth, loginRateLimit, recordLoginFailure, clearLoginAttempts } from './server/auth.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 
-app.use(express.json())
+app.use(express.json({ limit: '1mb' }))
 
 // Serve uploaded images
 app.use('/uploads', express.static(UPLOADS_DIR))
@@ -42,11 +42,15 @@ app.get('/api/merch', (_req, res) => {
 
 // --- Auth ---
 
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', loginRateLimit, async (req, res) => {
   const { password } = req.body
   if (!password) return res.status(400).json({ error: 'Password required' })
   const result = await login(password)
-  if (result.error) return res.status(401).json(result)
+  if (result.error) {
+    recordLoginFailure(req.ip)
+    return res.status(401).json(result)
+  }
+  clearLoginAttempts(req.ip)
   res.json(result)
 })
 
