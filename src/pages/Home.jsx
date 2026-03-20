@@ -2,7 +2,7 @@ function Home() {
   return (
     <div>
       <section className="text-center pt-16 pb-12 max-sm:pt-4 max-sm:pb-2">
-        <img src="/gabagool_logo.png" alt="Gabagool" className="w-[600px] max-w-full h-auto max-sm:w-[400px]" />
+        <img src="/gabagool_logo.png" alt="Gabagool" className="w-[600px] max-w-full h-auto mx-auto max-sm:w-[400px]" />
       </section>
 
       <section className="pt-4 pb-16">
