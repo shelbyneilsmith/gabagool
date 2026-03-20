@@ -10,7 +10,19 @@ import { login, requireAuth, loginRateLimit, recordLoginFailure, clearLoginAttem
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const app = express()
 
+app.set('trust proxy', 1)
+
 app.use(express.json({ limit: '1mb' }))
+
+// Security headers
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('X-Frame-Options', 'DENY')
+  res.setHeader('X-XSS-Protection', '1; mode=block')
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+  next()
+})
 
 // Serve uploaded images
 app.use('/uploads', express.static(UPLOADS_DIR))
@@ -182,6 +194,7 @@ app.get('/{*path}', (_req, res) => {
 })
 
 const PORT = process.env.PORT || 5150
-app.listen(PORT, () => {
-  console.log(`Gabagool server running on port ${PORT}`)
+const HOST = process.env.HOST || '127.0.0.1'
+app.listen(PORT, HOST, () => {
+  console.log(`Gabagool server running on ${HOST}:${PORT}`)
 })
