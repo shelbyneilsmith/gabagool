@@ -126,7 +126,7 @@ function Admin() {
   async function uploadReleaseArtwork(releaseId, file) {
     const formData = new FormData()
     formData.append('image', file)
-    const res = await api('/api/merch/upload', { method: 'POST', body: formData })
+    const res = await api('/api/releases/upload', { method: 'POST', body: formData })
     if (res.ok) { const { url } = await res.json(); const release = releases.find((r) => r.id === releaseId); if (release) saveRelease({ ...release, artwork: url }) }
   }
 

@@ -1,9 +1,11 @@
 import 'dotenv/config'
 import express from 'express'
 import multer from 'multer'
+import sharp from 'sharp'
 import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import { randomBytes } from 'crypto'
+import { unlink } from 'fs/promises'
 import { getBio, updateBio, getMerch, addMerchItem, updateMerchItem, deleteMerchItem, getReleases, addRelease, updateRelease, deleteRelease, getLiveIntro, updateLiveIntro, getMembers, addMember, updateMember, deleteMember, getShows, addShow, updateShow, deleteShow, UPLOADS_DIR } from './server/data.js'
 import { login, requireAuth, loginRateLimit, recordLoginFailure, clearLoginAttempts } from './server/auth.js'
 
@@ -96,9 +98,29 @@ app.delete('/api/merch/:id', requireAuth, (req, res) => {
   res.json({ success: true })
 })
 
-app.post('/api/merch/upload', requireAuth, upload.single('image'), (req, res) => {
+async function optimizeUpload(req, res, maxSize) {
   if (!req.file) return res.status(400).json({ error: 'No image uploaded' })
-  res.json({ url: `/uploads/${req.file.filename}` })
+  const inputPath = req.file.path
+  const outputName = randomBytes(8).toString('hex') + '.jpg'
+  const outputPath = join(UPLOADS_DIR, outputName)
+  try {
+    await sharp(inputPath)
+      .resize(maxSize, maxSize, { fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 82 })
+      .toFile(outputPath)
+    await unlink(inputPath)
+    res.json({ url: `/uploads/${outputName}` })
+  } catch {
+    res.status(500).json({ error: 'Image processing failed' })
+  }
+}
+
+app.post('/api/merch/upload', requireAuth, upload.single('image'), (req, res) => {
+  optimizeUpload(req, res, 800)
+})
+
+app.post('/api/releases/upload', requireAuth, upload.single('image'), (req, res) => {
+  optimizeUpload(req, res, 400)
 })
 
 // --- Releases API ---
