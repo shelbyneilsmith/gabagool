@@ -64,6 +64,7 @@ function Contact() {
       </p>
 
       <form onSubmit={handleSubmit}>
+        <input type="text" name="_gotcha" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
         <div className="flex gap-6 max-sm:flex-col max-sm:gap-0">
           <div className="mb-6 flex-1">
             <label htmlFor="name" className={labelClass}>Name</label>
