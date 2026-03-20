@@ -19,7 +19,7 @@ function Home() {
             </p>
             <div className="flex flex-col gap-3 mt-2 max-sm:items-center">
               <a
-                href="https://open.spotify.com"
+                href="https://open.spotify.com/album/3hXjIN9ZvBiCldiDDltiI1?si=Et3uHYVQRu6jDXjV72pztg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 py-[0.85rem] px-6 rounded-full font-heading text-sm font-semibold tracking-[0.02em] no-underline transition-all duration-200 w-fit hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] bg-spotify text-black"
