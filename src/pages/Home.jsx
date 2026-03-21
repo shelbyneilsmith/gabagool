@@ -30,7 +30,7 @@ function Home() {
                 Listen on Spotify
               </a>
               <a
-                href="https://music.apple.com"
+                href="https://music.apple.com/us/album/horror-wonder/1886861641"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 py-[0.85rem] px-6 rounded-full font-heading text-sm font-semibold tracking-[0.02em] no-underline transition-all duration-200 w-fit hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.4)] bg-apple-music text-white"
