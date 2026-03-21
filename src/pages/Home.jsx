@@ -14,7 +14,7 @@ function Home() {
             <p className="font-heading text-xs font-bold uppercase tracking-[0.2em] text-text-dim">New Album</p>
             <h2 className="font-heading text-5xl font-bold text-accent-bright tracking-tight leading-[1.1] max-sm:text-[2.2rem]">Horror, Wonder</h2>
             <p className="text-[1.05rem] leading-[1.8] text-text max-w-[440px] max-sm:max-w-full">
-              The long-awaited full-length. Twelve tracks of dread, wonder, and whatever
+              The long-awaited full-length. Thirteen tracks of dread, wonder, and whatever
               happens when you stop pretending everything is fine. Out now everywhere.
             </p>
             <div className="flex flex-col gap-3 mt-2 max-sm:items-center">
